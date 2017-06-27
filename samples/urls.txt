@@ -1,0 +1,5 @@
+https://tv.mail.ru/ajax/channel/index/?region_id=70&page=1
+https://tv.mail.ru/ajax/channel/?region_id=70&channel_id=850
+https://tv.mail.ru/ajax/event/?id=68530232&region_id=70
+https://tv.yandex.ru/ajax/i-tv-region/get?params={"limit":1000,"fields":"id,title,synonyms"}&resource=channels
+https://tv.yandex.ru/ajax/i-tv-region/get?params={"channelIds":"146","duration":691200,"channelProgramsLimit":1000}&resource=schedule&userRegion=213

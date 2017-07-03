@@ -1,6 +1,7 @@
 import java.io.File
 import net.sourceforge.argparse4j.*
 import net.sourceforge.argparse4j.impl.Arguments
+import net.sourceforge.argparse4j.inf.ArgumentParserException
 import net.sourceforge.argparse4j.internal.HelpScreenException
 import java.time.LocalDate
 
@@ -147,44 +148,49 @@ fun main(args: Array<String>) {
                 .help("preserve data at most DAYS old")
                 .type(Int::class.java)
 
-        val parsed = ap.parseArgs(args)
-        val cache = Cache(parsed.getString("cache"))
-        initLogger(parsed.getString("log_file"), parsed.getBoolean("verbose"))
+        try {
+            val parsed = ap.parseArgs(args)
+            val cache = Cache(parsed.getString("cache"))
+            initLogger(parsed.getString("log_file"), parsed.getBoolean("verbose"))
 
-        when (parsed.get<Command>("cmd")) {
-            Command.Match -> executeMatch(
-                    cache,
-                    File(parsed.getString("FILE")),
-                    parsed.getBoolean("interactive"),
-                    parsed.getBoolean("clear"),
-                    parsed.getString("prefer"),
-                    parsed.getInt("mailru_region"),
-                    parsed.getInt("mailru_tz"),
-                    parsed.getInt("yandex_region"),
-                    parsed.getInt("yandex_tz"),
-                    parsed.getBoolean("offline"))
-            Command.Fetch -> executeFetch(
-                    cache,
-                    parsed.getString("date")?.let { dateFromString(it) } ?: LocalDate.now())
-            Command.Build -> executeBuild(
-                    cache,
-                    File(parsed.getString("FILE")),
-                    parsed.getBoolean("offline"),
-                    parsed.getString("date")?.let { dateFromString(it) } ?: LocalDate.now())
-            Command.List -> executeList(
-                    cache,
-                    parsed.getString("PATTERN"),
-                    parsed.get("status"))
-            Command.Set -> executeSet(
-                    cache,
-                    parsed.getInt("ID"),
-                    parsed.getString("PROVIDER"),
-                    parsed.getInt("PROVIDER_ID"))
-            Command.Unset -> executeUnset(cache, parsed.getInt("ID"))
-            Command.CleanUp -> executeCleanUp(cache, parsed.getInt("DAYS"))
-            null -> {}
+            when (parsed.get<Command>("cmd")) {
+                Command.Match -> executeMatch(
+                        cache,
+                        File(parsed.getString("FILE")),
+                        parsed.getBoolean("interactive"),
+                        parsed.getBoolean("clear"),
+                        parsed.getString("prefer"),
+                        parsed.getInt("mailru_region"),
+                        parsed.getInt("mailru_tz"),
+                        parsed.getInt("yandex_region"),
+                        parsed.getInt("yandex_tz"),
+                        parsed.getBoolean("offline"))
+                Command.Fetch -> executeFetch(
+                        cache,
+                        parsed.getString("date")?.let { dateFromString(it) } ?: LocalDate.now())
+                Command.Build -> executeBuild(
+                        cache,
+                        File(parsed.getString("FILE")),
+                        parsed.getBoolean("offline"),
+                        parsed.getString("date")?.let { dateFromString(it) } ?: LocalDate.now())
+                Command.List -> executeList(
+                        cache,
+                        parsed.getString("PATTERN"),
+                        parsed.get("status"))
+                Command.Set -> executeSet(
+                        cache,
+                        parsed.getInt("ID"),
+                        parsed.getString("PROVIDER"),
+                        parsed.getInt("PROVIDER_ID"))
+                Command.Unset -> executeUnset(cache, parsed.getInt("ID"))
+                Command.CleanUp -> executeCleanUp(cache, parsed.getInt("DAYS"))
+                null -> {}
+            }
+        } catch (_: HelpScreenException) {
+        } catch (e: ArgumentParserException) {
+            System.err.println("ERROR: ${e.localizedMessage}")
+            System.err.println(e.parser.formatHelp())
         }
-    } catch (_: HelpScreenException) {
     } catch (e: Exception) {
         getLogger().severe(e.toString())
     }

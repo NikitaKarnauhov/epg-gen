@@ -228,9 +228,12 @@ fun executeMatch(cache: Cache, m3u8: File, interactive: Boolean,
     } else
         status.playlist.channels.forEach { processChannel(it.value) }
 
-    println("${matchedCount} channels matched")
-    println("${skipped.size} channels not matched:")
-    skipped.sortedBy { it.name }.forEach { println("    ${it.name}") }
+    println("${matchedCount} channel(s) matched")
+
+    if (skipped.isNotEmpty()) {
+        println("${skipped.size} channel(s) not matched:")
+        skipped.sortedBy { it.name }.forEach { println("    ${it.name}") }
+    }
 
     if (status.needUpdate)
         cache.getStatus().bufferedWriter().use {

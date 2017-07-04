@@ -6,6 +6,7 @@ import net.sourceforge.argparse4j.internal.HelpScreenException
 import java.time.LocalDate
 
 val projectName = "epg-gen"
+val projectVersion = "0.1"
 
 fun dateFromString(time: String): LocalDate? {
     val ints = time.split('-').mapNotNull { it.toIntOrNull() }
@@ -25,6 +26,7 @@ fun executeCleanUp(cache: Cache, days: Int) {
 fun main(args: Array<String>) {
     try {
         val ap = ArgumentParsers.newArgumentParser(projectName)
+        ap.version("${projectName} version ${projectVersion}")
         ap.addArgument("-c", "--cache")
                 .help("cache directory")
                 .metavar("DIR")
@@ -37,6 +39,9 @@ fun main(args: Array<String>) {
                 .help("output more info")
                 .action(Arguments.storeTrue())
                 .setDefault(false)
+        ap.addArgument("--version")
+                .help("show program version and exit")
+                .action(Arguments.version())
 
         val sps = ap.addSubparsers()
         val matchArgs = sps.addParser("match")

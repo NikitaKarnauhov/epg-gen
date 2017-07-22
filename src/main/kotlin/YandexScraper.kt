@@ -60,7 +60,11 @@ class YandexScraper(name: String = "yandex"): Scraper(name) {
             programJson.array<JsonObject>("images")?.forEach { imageJson ->
                 fun parseSize(sizeJson: JsonObject): Unit {
                     sizeJson.string("src")?.let {
-                        result.icons += Programme.Icon(it,
+                        result.icons += Programme.Icon(
+                                if (Regex("""^\w+://""").matches(it))
+                                    it
+                                else
+                                    "http://" + Regex("""^/+""").replace(it, ""),
                                 sizeJson.int("width") ?: 0,
                                 sizeJson.int("height") ?: 0)
                     }

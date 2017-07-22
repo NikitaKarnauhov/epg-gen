@@ -112,17 +112,6 @@ class YandexScraper(name: String = "yandex"): Scraper(name) {
                 }
             }
         }
-        /*currentDate = date
-        currentMinutes = -1
-        channelJson.array<JsonObject>("schedule")?.forEach {
-            val event = it.obj("event")
-            event?.array<JsonObject>("past")?.mapNotNullTo(result) {
-                programmeFromJson(channel, it)
-            }
-            event?.array<JsonObject>("current")?.mapNotNullTo(result) {
-                programmeFromJson(channel, it)
-            }
-        }*/
         return result
     }
 

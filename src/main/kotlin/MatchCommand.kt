@@ -186,6 +186,10 @@ fun executeMatch(cache: Cache, m3u8: File, interactive: Boolean,
             if (channel.channel != null) {
                 log.info("Channel \"${pc.name}\" matched to " +
                         "\"${channel.channel!!.name}\"")
+                if (channel.id != pc.id) {
+                    channel.id = pc.id
+                    status.needUpdate = true
+                }
                 ++matchedCount
                 return
             }

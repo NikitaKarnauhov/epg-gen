@@ -157,7 +157,6 @@ data class Programme(val channel: PlaylistChannel, val start: LocalDateTime) {
                         Stereo.DolbyDigital -> "dolby digital"
                         Stereo.Bilingual -> "bilingual"
                         Stereo.Surround -> "surround"
-                        else -> ""
                     })
             }
             return xml
@@ -183,7 +182,6 @@ data class Programme(val channel: PlaylistChannel, val start: LocalDateTime) {
                             SubtitlesType.Teletext -> "teletext"
                             SubtitlesType.Onscreen -> "onscreen"
                             SubtitlesType.DeafSigned -> "deaf-signed"
-                            else -> ""
                         })
             }
             return xml

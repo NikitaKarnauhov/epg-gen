@@ -224,6 +224,12 @@ fun executeMatch(cache: Cache, m3u8: File, interactive: Boolean,
         if (!m3u8.exists() || !m3u8.isFile || !m3u8.canRead())
             throw Exception("Cannot read playlist file: ${m3u8.absolutePath}")
         val m3u = m3u8.inputStream().use { Playlist.fromM3U(it) }
+        val currentCount = status.playlist.channels.size
+        status.playlist.channels = status.playlist.channels.filterKeys {
+            m3u.channels.containsKey(it)
+        }.toMutableMap()
+        if (status.playlist.channels.size < currentCount)
+            status.needUpdate = true
         m3u.channels.forEach { processChannel(it.value) }
     } else
         status.playlist.channels.forEach { processChannel(it.value) }

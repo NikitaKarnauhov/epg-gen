@@ -131,7 +131,7 @@ class YandexScraper(name: String = "yandex"): Scraper(name) {
     override fun fetchIndex(regionId: Int, timeZone: Int, cache: Cache) {
         init(regionId, timeZone)
         fetch(root +
-                "?params={\"limit\":1000,\"fields\":\"id,title,synonyms\"}" +
+                "?params={\"limit\":1000}" +
                 "&resource=channels&userRegion=${region}",
                 cache.getIndex(name, 0)) {
             parseIndex(it)
